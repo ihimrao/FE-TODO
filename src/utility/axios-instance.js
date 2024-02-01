@@ -2,7 +2,7 @@ import axios from "axios";
 import { Cookies } from "../shared/utility";
 
 const instance = axios.create({
-    baseURL: "https://sourcya-connect.herokuapp.com",
+    baseURL: process.env.BASE_URL,
 });
 
 instance.interceptors.request.use(
@@ -11,7 +11,7 @@ instance.interceptors.request.use(
         config.headers["Accept"] = "application/json";
         config.headers["Content-Type"] = "application/json";
         if (token) {
-            config.headers["Authorization"] = `Bearer ${token}`;
+            config.headers["Authorization"] = `${token}`;
         }
         return config;
     },

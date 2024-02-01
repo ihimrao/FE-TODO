@@ -90,12 +90,10 @@ const Auth = (props) => {
     };
     
     const submitHandler = (data) => {
-        // 'admin@example.com' should be the email
-        // '123456' should be the password
         setSubmitting(true)
         axios
-        .post("/auth/local", {
-            identifier: data.username,
+        .post("/login", {
+            email: data.username,
             password: data.password,
         })
         .then((res) => {
