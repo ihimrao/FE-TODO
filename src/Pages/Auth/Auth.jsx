@@ -52,7 +52,7 @@ const ErrorMessage = styled.p`
   text-transform: capitalize;
   color: #df1338;
 `;
-const AppVersion = styled.h6`
+const SubHead = styled.h6`
   font-size: 14px;
   line-height: 1;
   font-weight: 500;
@@ -99,7 +99,7 @@ const Auth = (props) => {
     setSubmitting(true);
     axios
       .post("/auth/local", {
-        identifier: data.username,
+        email: data.username,
         password: data.password
       })
       .then((res) => {
@@ -116,7 +116,7 @@ const Auth = (props) => {
     <AuthlWrapper>
       <form onSubmit={handleSubmit(submitHandler)}>
         <FormHeading>Login to your Account</FormHeading>
-        <AppVersion>{`${import.meta.env.PACKAGE_VERSION}`}</AppVersion>
+        <SubHead>To-Do's</SubHead>
         <FormBody>
           <Controller
             name="username"

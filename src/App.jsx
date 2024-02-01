@@ -2,12 +2,13 @@ import { useContext } from "react";
 import { Navigate, Route, Routes } from "react-router-dom";
 import { StyleSheetManager } from "styled-components";
 import rtlPlugin from "stylis-plugin-rtl";
+import Auth from "./Pages/Auth/Auth";
+import Home from "./Pages/Home/Home";
+import Login from "./Pages/Login/Login";
+import TodoApp from "./Pages/Todo/Todo";
 import Layout from "./components/Layout/Layout";
 import RequireAuth from "./components/RequireAuth/RequireAuth";
 import Page404 from "./components/UI/Page404/Page404";
-import Auth from "./Pages/Auth/Auth";
-import Login from "./Pages/Login/Login";
-import Home from "./Pages/Home/Home";
 import AuthContext from "./store/auth-context";
 import ThemeContext from "./store/theme-context";
 
@@ -22,6 +23,7 @@ function App() {
     const routes = (
         <Routes>
             <Route path="/login" element={!isLoggedIn ? <Auth /> : <Navigate replace to="/" />} />
+            <Route path="/base" element={<TodoApp />} />
             <Route path="/login-2" element={!isLoggedIn ? <Login /> : <Navigate replace to="/" />} />
             <Route
                 path="/"

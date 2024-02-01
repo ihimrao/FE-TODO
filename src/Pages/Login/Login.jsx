@@ -44,7 +44,7 @@ const ErrorMessage = styled.p`
     text-transform: capitalize;
     color: #df1338;
 `;
-const AppVersion = styled.h6`
+const SubHead = styled.h6`
     font-size: 14px;
     line-height: 1;
     font-weight: 500;
@@ -110,7 +110,7 @@ const Auth = (props) => {
         <AuthlWrapper>
             <form onSubmit={handleSubmit(submitHandler)}>
                 <FormHeading>Login to your Account</FormHeading>
-                <AppVersion>{`${import.meta.env.PACKAGE_VERSION}`}</AppVersion>
+                <SubHead>{`${import.meta.env.PACKAGE_VERSION}`}</SubHead>
                 <FormBody>
                     <Controller name="username" control={control} render={({ field }) => ( 
                         <TextField id="Username" label="Username" variant="outlined" error={!!errors.username?.message} helperText={ errors.username?.message } {...field} /> 
