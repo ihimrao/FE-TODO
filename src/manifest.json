@@ -1,6 +1,6 @@
 {
-    "short_name": "Sourcya",
-    "name": "Sourcya Vite",
+    "short_name": "Todo's",
+    "name": "Todo's Vite",
     "icons": [
         {
             "src": "./favicon.svg",

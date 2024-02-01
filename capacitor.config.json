@@ -1,6 +1,0 @@
-{
-	"appId": "io.sourcya.app",
-	"appName": "sourcya",
-	"webDir": "build",
-	"bundledWebRuntime": false
-}
