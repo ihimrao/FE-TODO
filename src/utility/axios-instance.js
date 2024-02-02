@@ -11,7 +11,7 @@ instance.interceptors.request.use(
         config.headers["Accept"] = "application/json";
         config.headers["Content-Type"] = "application/json";
         if (token) {
-            config.headers["Authorization"] = `${token}`;
+            config.headers["Token"] = `${token}`;
         }
         return config;
     },

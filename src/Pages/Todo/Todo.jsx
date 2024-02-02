@@ -1,37 +1,81 @@
-import React, { useState } from 'react';
-import { useLocation, useNavigate } from 'react-router-dom';
+import React, { useContext, useEffect, useState } from 'react';
+import AuthContext from '../../store/auth-context';
+import useTodoStore from '../../utility/TodoData';
+import axios from "../../utility/axios-instance";
 
 const TodoApp = () => {
     const [todos, setTodos] = useState([]);
     const [todoInput, setTodoInput] = useState('');
-    const [user, setUser] = useState('John Doe');
+    const authCtx = useContext(AuthContext);
+    const { logout } = authCtx;
+
+
+    useEffect(() => {
+        axios
+            .get("/todo")
+            .then((res) => {
+                setTodos(res.data.data)
+            })
+    }, [])
 
     const addTodo = () => {
         if (todoInput.trim() !== '') {
-            setTodos([...todos, { id: Date.now(), text: todoInput, completed: false }]);
+            const d = todos || []
+            setTodos([...d, { _id: "temp", title: todoInput, completed: false, description: "", incremental: true }]);
             setTodoInput('');
+            axios
+                .post("/todo", { title: todoInput, completed: false, description: "", })
+                .then((res) => {
+                    if (res.status === 200) {
+                        axios
+                            .get("/todo")
+                            .then((res) => {
+                                setTodos(res.data.data)
+                            })
+                    } else {
+                        setTodos([...todos.filter(it => it._id !== "temp")])
+                    }
+                })
         }
     };
 
-    const toggleTodo = (id) => {
-        setTodos((prevTodos) =>
-            prevTodos.map((todo) =>
-                todo.id === id ? { ...todo, completed: !todo.completed } : todo
-            )
-        );
+    const toggleTodo = (id, statee) => {
+        axios
+            .put(`/todo/${id}`, { completed: !statee })
+            .then((res) => {
+                if (res.status === 200) {
+                    axios
+                        .get("/todo")
+                        .then((res) => {
+                            setTodos(res.data.data)
+                        })
+                }
+            })
+        // setTodos((prevTodos) =>
+        //     prevTodos.map((todo) =>
+        //         todo.id === id ? { ...todo, completed: !todo.completed } : todo
+        //     )
+        // );
     };
 
     const removeTodo = (id) => {
-        setTodos((prevTodos) => prevTodos.filter((todo) => todo.id !== id));
+        axios
+            .delete(`/todo/${id}`)
+            .then((res) => {
+                if (res.status === 200) {
+                    axios
+                        .get("/todo")
+                        .then((res) => {
+                            setTodos(res.data.data)
+                        })
+                }
+            })
+        // setTodos((prevTodos) => prevTodos.filter((todo) => todo.id !== id));
     };
-    let location = useLocation();
-    const navigate = useNavigate();
-
-    let from = location.state?.from?.pathname || "/";
+    const { todo, addTodos } = useTodoStore()
     const handleLogout = () => {
-        navigate(from, { replace: true });
+        logout()
     };
-
     return (
         <div style={{ fontFamily: 'Arial, sans-serif', display: 'flex', flexDirection: 'column', minHeight: '100vh' }}>
             <header style={{ backgroundColor: '#4CAF50', padding: '15px', borderRadius: '8px', color: 'white' }}>
@@ -79,7 +123,7 @@ const TodoApp = () => {
                     </button>
                 </div>
                 <div style={{ display: 'flex', flexWrap: 'wrap', gap: '20px', alignItems: "center", justifyContent: "center" }}>
-                    {todos.map((todo) => (
+                    {todos?.map((todo) => (
                         <div
                             key={todo.id}
                             style={{
@@ -98,15 +142,15 @@ const TodoApp = () => {
                                 <input
                                     type="checkbox"
                                     checked={todo.completed}
-                                    onChange={() => toggleTodo(todo.id)}
+                                    onChange={() => toggleTodo(todo._id, !!todo?.completed)}
                                     style={{ marginRight: '12px' }}
                                 />
                                 <span style={{ textDecoration: todo.completed ? 'line-through' : 'none', flex: '1' }}>
-                                    {todo.text}
+                                    {todo.title}
                                 </span>
                             </div>
                             <button
-                                onClick={() => removeTodo(todo.id)}
+                                onClick={() => removeTodo(todo._id)}
                                 style={{
                                     backgroundColor: '#f44336',
                                     color: 'white',

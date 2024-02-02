@@ -95,16 +95,18 @@ const Auth = (props) => {
     event.preventDefault();
   };
 
-  const submitHandler = (data) => {
+  const submitHandler = (data, e) => {
     setSubmitting(true);
     axios
-      .post("/auth/local", {
+      .post("/login", {
         email: data.username,
         password: data.password
       })
       .then((res) => {
-        login(res.data.jwt, res.data.user);
-        navigate(from, { replace: true });
+        if (res.status === 200) {
+          login(res.data.data, res.data);
+          navigate(from, { replace: true });
+        }
       })
       .catch((err) => {
         setSubmitting(false);
