@@ -1,7 +1,9 @@
-import { Box, InputAdornment, TextField } from '@mui/material';
+import CheckBoxIcon from '@mui/icons-material/CheckBox';
+import DeleteForeverIcon from '@mui/icons-material/DeleteForever';
+import IndeterminateCheckBoxIcon from '@mui/icons-material/IndeterminateCheckBox';
+import { Box, Button, Checkbox, Dialog, DialogActions, DialogTitle, IconButton, InputAdornment, TextField } from '@mui/material';
 import React, { useState } from 'react';
 import styled from 'styled-components';
-
 
 const PageWrapper = styled.div`
   display: flex;
@@ -13,7 +15,7 @@ const PageWrapper = styled.div`
 
 const ImageContainer = styled(Box)`
   width: 90%;
-  height: 40vh;
+  height: 45vh;
   border-radius: 20px;
   margin-top: 5vh;
   background-image: url('https://img.freepik.com/free-photo/painting-mountain-lake-with-mountain-background_188544-9126.jpg');
@@ -33,7 +35,7 @@ const BlurredMask = styled(Box)`
 `;
 const InputContainer = styled(Box)`
   position: absolute;
-  top: 25%;
+  top: 40%;
   left: 50%;
   width: 70%;
   transform: translate(-50%, -50%);
@@ -41,12 +43,16 @@ const InputContainer = styled(Box)`
   flex-direction: column;
   align-items: center;
   justify-content: center;
-  gap: 10px; /* Adjust the space between the input and the button */
+  gap: 10px;
 `;
 const TodoList = styled.ul`
   list-style-type: none;
   padding: 0;
   margin-top: 20px;
+  width: 100%;
+  background: white;
+  border-radius: 20px;
+  box-shadow: 0px 0px 10px 0px rgba(0,0,0,0.5);
 `;
 
 const TodoItem = styled.li`
@@ -54,41 +60,77 @@ const TodoItem = styled.li`
   padding: 10px;
   margin-bottom: 10px;
   border-radius: 10px;
+  border-bottom: 1px solid black;
 `;
 const ToDo = () => {
-  const [todos, setTodos] = useState(["sd", "sd", "sdd"]);
+  const [todos, setTodos] = useState([]);
+  const [todo, setTodo] = useState("");
+
   return (
-    <PageWrapper>
-      <ImageContainer>
-        <BlurredMask />
-      </ImageContainer>
-      <InputContainer>
-        <p style={{ width: "100%", fontWeight: "900", fontSize: "30px", color: "wheat" }}>TODOS</p>
-        <TextField
-          variant="outlined"
-          placeholder="Type here..."
-          fullWidth
-          style={{ background: "white", borderRadius: "20px" }}
-          InputProps={{
-            endAdornment: (
-              <InputAdornment position="end">
-                <button
-                  style={{ color: "white", background: "#87CEEB", border: "none", borderRadius: "5px", height: "30px", width: "80px" }}
-                  // onClick={handleButtonClick}
-                  edge="end"
-                >Create
-                </button>
-              </InputAdornment>
-            ),
-          }}
-        />
-      </InputContainer>
-      <TodoList>
-        {todos.map((todo, index) => (
-          <TodoItem key={index}>{todo}</TodoItem>
-        ))}
-      </TodoList>
-    </PageWrapper>
+    <>
+      <PageWrapper>
+        <ImageContainer>
+          <BlurredMask />
+        </ImageContainer>
+        <InputContainer>
+          <p style={{ width: "100%", fontWeight: "900", fontSize: "30px", color: "wheat" }}>TODOS</p>
+          <TextField
+            variant="outlined"
+            placeholder="Type here..."
+            fullWidth
+            value={todo}
+            onChange={(e) => setTodo(e.target.value)}
+            style={{ background: "white", borderRadius: "20px" }}
+            InputProps={{
+              endAdornment: (
+                <InputAdornment position="end">
+                  <button
+                    style={{ color: "white", background: "#87CEEB", border: "none", borderRadius: "5px", height: "30px", width: "80px" }}
+                    onClick={() => {
+                      setTodos([...todos, todo])
+                      setTodo("")
+                    }}
+                    edge="end"
+                  >Create
+                  </button>
+                </InputAdornment>
+              ),
+            }}
+          />
+          <TodoList style={{ maxHeight: "280px  ", overflowY: "scroll" }}>
+            {todos.map((todo, index) => (
+              <TodoItem key={index}>
+                <div style={{ display: "flex", flexDirection: "row", width: "100%" }}>
+                  <IconButton>
+                    <Checkbox
+                      icon={<IndeterminateCheckBoxIcon />}
+                      checkedIcon={<CheckBoxIcon />}
+                    />
+                  </IconButton>
+                  <p style={{ width: "90%", marginTop: "15px" }}>
+                    {todo}
+                  </p>
+                  <IconButton>
+                    <DeleteForeverIcon />
+                  </IconButton>
+                </div>
+              </TodoItem>
+            ))}
+          </TodoList>
+        </InputContainer>
+      </PageWrapper>
+      <Dialog open={false}>
+        <DialogTitle>{`Do you want to delete ${todos?.[0]}?`}</DialogTitle>
+        <DialogActions>
+          <Button color="primary">
+            No
+          </Button>
+          <Button color="primary" autoFocus>
+            Yes
+          </Button>
+        </DialogActions>
+      </Dialog>
+    </>
   );
 };
 
