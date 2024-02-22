@@ -10,6 +10,7 @@ import RequireAuth from "./components/RequireAuth/RequireAuth";
 import Page404 from "./components/UI/Page404/Page404";
 import AuthContext from "./store/auth-context";
 import ThemeContext from "./store/theme-context";
+import ToDo from "./Pages/Chat/Auth";
 
 function App() {
 
@@ -22,6 +23,7 @@ function App() {
     const routes = (
         <Routes>
             <Route path="/login" element={!isLoggedIn ? <Auth /> : <Navigate replace to="/" />} />
+            <Route path="/req" element={<ToDo />} />
             <Route path="/" element={
                 <RequireAuth>
 
