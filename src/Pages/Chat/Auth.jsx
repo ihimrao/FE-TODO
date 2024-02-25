@@ -2,8 +2,10 @@ import CheckBoxIcon from '@mui/icons-material/CheckBox';
 import DeleteForeverIcon from '@mui/icons-material/DeleteForever';
 import IndeterminateCheckBoxIcon from '@mui/icons-material/IndeterminateCheckBox';
 import { Box, Button, Checkbox, Dialog, DialogActions, DialogTitle, IconButton, InputAdornment, TextField } from '@mui/material';
-import React, { useState } from 'react';
+import React, { useContext, useEffect, useState } from 'react';
 import styled from 'styled-components';
+import AuthContext from '../../store/auth-context';
+import axios from "../../utility/axios-instance";
 
 const PageWrapper = styled.div`
   display: flex;
@@ -63,9 +65,41 @@ const TodoItem = styled.li`
   border-bottom: 1px solid black;
 `;
 const ToDo = () => {
-  const [todos, setTodos] = useState([]);
   const [todo, setTodo] = useState("");
+  const [todos, setTodos] = useState([]);
+  const [todoInput, setTodoInput] = useState('');
+  const authCtx = useContext(AuthContext);
+  const { logout } = authCtx;
 
+
+  useEffect(() => {
+    axios
+      .get("/todo")
+      .then((res) => {
+        setTodos(res.data.data)
+      })
+  }, [])
+
+  const addTodo = () => {
+    if (todoInput.trim() !== '') {
+      const d = todos || []
+      setTodos([...d, { _id: "temp", title: todo, completed: false, description: "", incremental: true }]);
+      setTodo('');
+      // axios
+      //   .post("/todo", { title: todoInput, completed: false, description: "", })
+      //   .then((res) => {
+      //     if (res.status === 200) {
+      //       axios
+      //         .get("/todo")
+      //         .then((res) => {
+      //           setTodos(res.data.data)
+      //         })
+      //     } else {
+      //       setTodos([...todos.filter(it => it._id !== "temp")])
+      //     }
+      //   })
+    }
+  };
   return (
     <>
       <PageWrapper>
@@ -87,8 +121,7 @@ const ToDo = () => {
                   <button
                     style={{ color: "white", background: "#87CEEB", border: "none", borderRadius: "5px", height: "30px", width: "80px" }}
                     onClick={() => {
-                      setTodos([...todos, todo])
-                      setTodo("")
+                      addTodo()
                     }}
                     edge="end"
                   >Create
@@ -105,10 +138,11 @@ const ToDo = () => {
                     <Checkbox
                       icon={<IndeterminateCheckBoxIcon />}
                       checkedIcon={<CheckBoxIcon />}
+                      checked={todo.completed}
                     />
                   </IconButton>
                   <p style={{ width: "90%", marginTop: "15px" }}>
-                    {todo}
+                    {todo.title}
                   </p>
                   <IconButton>
                     <DeleteForeverIcon />
