@@ -2,7 +2,7 @@ import axios from "axios";
 import { Cookies } from "../shared/utility";
 
 const instance = axios.create({
-    baseURL: "http://localhost:8000/",
+    baseURL: "http://localhost:8080/",
 });
 
 instance.interceptors.request.use(

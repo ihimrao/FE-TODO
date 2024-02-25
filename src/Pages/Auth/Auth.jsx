@@ -98,7 +98,7 @@ const Auth = (props) => {
   const submitHandler = (data, e) => {
     setSubmitting(true);
     axios
-      .post("/login", {
+      .post("http://localhost:8081/login", {
         email: data.username,
         password: data.password
       })

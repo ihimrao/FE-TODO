@@ -60,7 +60,6 @@ const TodoItem = styled.li`
   padding: 10px;
   margin-bottom: 10px;
   border-radius: 10px;
-  border-bottom: 1px solid black;
 `;
 const ToDo = () => {
   const [todos, setTodos] = useState([]);
@@ -100,7 +99,7 @@ const ToDo = () => {
           <TodoList style={{ maxHeight: "280px  ", overflowY: "scroll" }}>
             {todos.map((todo, index) => (
               <TodoItem key={index}>
-                <div style={{ display: "flex", flexDirection: "row", width: "100%" }}>
+                <div style={{ display: "flex", flexDirection: "row", width: "100%", borderBottom: "1px dashed" }}>
                   <IconButton>
                     <Checkbox
                       icon={<IndeterminateCheckBoxIcon />}
